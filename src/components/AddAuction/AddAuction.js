@@ -83,9 +83,8 @@ const AddAuction = ({ setAuction, auction }) => {
                   };
                   setAuction(newAuction);
                   console.log(newAuction);
-                  const storageRef = ref(storage);
 
-                  const imageRef = ref(storageRef, `images`);
+                  const imageRef = ref(storage, `images/${values.image.name}`);
 
                   uploadBytes(imageRef, values.image).then((snapshot) => {
                     console.log("Uploaded a blob or file!");
