@@ -9,8 +9,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import { Formik, Form } from "formik";
 import { useMainContext } from "../../context/main_context";
-import { ref, uploadBytes } from "firebase/storage";
-import { storage } from "../../config/firebase";
+import useStorage from "../../hooks/useStorage";
 
 const AddAuction = ({ setAuction, auction }) => {
   const [open, setOpen] = useState(false);
@@ -83,12 +82,15 @@ const AddAuction = ({ setAuction, auction }) => {
                   };
                   setAuction(newAuction);
                   console.log(newAuction);
+                  useStorage(newAuction);
+                  setOpen(false);
+                  //other way by using a hook for the uploading
 
-                  const imageRef = ref(storage, `images/${values.image.name}`);
+                  // const imageRef = ref(storage, `images/${values.image.name}`);
 
-                  uploadBytes(imageRef, values.image).then((snapshot) => {
-                    console.log("Uploaded a blob or file!");
-                  });
+                  // uploadBytes(imageRef, values.image).then((snapshot) => {
+                  //   console.log("Uploaded a blob or file!");
+                  // });
                 }}
               >
                 {({ values, handleChange, errors, setFieldValue }) => (

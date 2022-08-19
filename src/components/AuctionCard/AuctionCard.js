@@ -7,43 +7,75 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import Countdown from "react-countdown";
+import { useMainContext } from "../../context/main_context";
 
-const AuctionCard = (props) => {
+const renderer = ({ days, hours, minutes, seconds, completed, props }) => {
+  if (completed) {
+    // Render a completed state
+    return null;
+  } else {
+    // Render a countdown
+    return (
+      <>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Card sx={{ maxWidth: 345 }}>
+            <CardMedia
+              component="img"
+              height="140"
+              sx={{
+                minWidth: "250px",
+              }}
+              image={props.item.imageUrl}
+              alt="green iguana"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h3" component="div">
+                {props.item.title}
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+                {props.item.description}
+              </Typography>
+              <Typography variant="h5">
+                {days * 24 + hours} hr: {minutes} min: {seconds} sec
+              </Typography>
+            </CardContent>
+            <CardActions>
+              {!props.owner ? (
+                <Button size="large">Bid</Button>
+              ) : props.owner.email === props.item.email ? (
+                <Button size="large">Cancel Auction</Button>
+              ) : (
+                <Button size="large">Bid</Button>
+              )}
+            </CardActions>
+          </Card>
+        </Grid>
+      </>
+    );
+  }
+};
+
+const AuctionCard = ({ doc }) => {
+  const { currentUser } = useMainContext();
+  let expireDate = doc.duration;
   return (
-    <>
-      <Grid
-        item
-        xs={12}
-        sm={6}
-        md={4}
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Card sx={{ maxWidth: 345 }}>
-          <CardMedia
-            component="img"
-            height="140"
-            image="/static/images/cards/contemplative-reptile.jpg"
-            alt="green iguana"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Lizard
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">Bid</Button>
-          </CardActions>
-        </Card>
-      </Grid>
-    </>
+    <Countdown
+      item={doc}
+      date={expireDate}
+      renderer={renderer}
+      owner={currentUser}
+    />
   );
 };
 
