@@ -79,7 +79,7 @@ const AddAuction = ({ setAuction, auction }) => {
                     .min(1)
                     .max(5),
                   startingPrice: Yup.number()
-                    .min(100)
+                    .min(100, "Starting price must be at least 100")
                     .required("Starting price is required"),
                   image: Yup.mixed().required("Image is required"),
                 })}
@@ -109,7 +109,7 @@ const AddAuction = ({ setAuction, auction }) => {
                   // });
                 }}
               >
-                {({ values, handleChange, errors, setFieldValue }) => (
+                {({ values, handleChange, errors, setFieldValue, touched }) => (
                   <Form>
                     <div className={classes.input}>
                       <Typography sx={{ margin: "10px" }}>Title</Typography>
@@ -120,7 +120,7 @@ const AddAuction = ({ setAuction, auction }) => {
                         name="title"
                         value={values.title}
                         onChange={handleChange}
-                        error={Boolean(errors.title)}
+                        error={Boolean(errors.title) && touched.title}
                         helperText={errors.title}
                       />
                     </div>
@@ -135,8 +135,14 @@ const AddAuction = ({ setAuction, auction }) => {
                         id="outlined-basic"
                         label="description"
                         variant="outlined"
-                        error={Boolean(errors.description)}
-                        helperText={errors.description}
+                        error={
+                          touched.description && Boolean(errors.description)
+                        }
+                        helperText={
+                          errors.description && touched.description
+                            ? errors.description
+                            : ""
+                        }
                       />
                     </div>
                     <div className={classes.input}>
@@ -150,8 +156,8 @@ const AddAuction = ({ setAuction, auction }) => {
                         id="outlined-basic"
                         label="duration"
                         variant="outlined"
-                        error={Boolean(errors.duration)}
-                        helperText={errors.duration}
+                        error={Boolean(errors.duration) && touched.duration}
+                        helperText={errors.duration && touched.duration}
                       />
                     </div>
                     <div className={classes.input}>
@@ -165,8 +171,12 @@ const AddAuction = ({ setAuction, auction }) => {
                         id="outlined-basic"
                         label="startingPrice"
                         variant="outlined"
-                        error={Boolean(errors.startingPrice)}
-                        helperText={errors.startingPrice}
+                        error={
+                          Boolean(errors.startingPrice) && touched.startingPrice
+                        }
+                        helperText={
+                          touched.startingPrice && errors.startingPrice
+                        }
                       />
                     </div>
                     <div className={classes.input}>

@@ -11,8 +11,7 @@ import { Formik, Form } from "formik";
 import { useMainContext } from "../../context/main_context";
 
 const Login = () => {
-  const { login, auth, currentUser, logout } = useMainContext();
-  const [open, setOpen] = useState(false);
+  const { login, auth, currentUser, logout, open, setOpen } = useMainContext();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const style = {

@@ -59,7 +59,14 @@ const renderer = ({ days, hours, minutes, seconds, completed, props }) => {
               }}
             >
               {!props.owner ? (
-                <Button size="large">Bid</Button>
+                <Button
+                  size="large"
+                  onClick={() => {
+                    props.setOpen(true);
+                  }}
+                >
+                  Bid
+                </Button>
               ) : props.owner.email === props.item.email ? (
                 <Button
                   size="large"
@@ -93,7 +100,7 @@ const renderer = ({ days, hours, minutes, seconds, completed, props }) => {
 };
 
 const AuctionCard = ({ doc }) => {
-  const { currentUser, endAuction, bidAuction } = useMainContext();
+  const { currentUser, endAuction, bidAuction, setOpen } = useMainContext();
   let expireDate = doc.duration;
   return (
     <Countdown
@@ -103,6 +110,7 @@ const AuctionCard = ({ doc }) => {
       owner={currentUser}
       endAuction={endAuction}
       bidAuction={bidAuction}
+      setOpen={setOpen}
     />
   );
 };

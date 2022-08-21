@@ -51,6 +51,8 @@ const initialState = {
 export const MainProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     const subscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
@@ -79,6 +81,8 @@ export const MainProvider = ({ children }) => {
         auth,
         endAuction,
         bidAuction,
+        open,
+        setOpen,
       }}
     >
       {children}

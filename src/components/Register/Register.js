@@ -63,8 +63,8 @@ const Register = () => {
                   email: Yup.string()
                     .email("Invalid email")
                     .required("Required"),
-                  password: Yup.string().required("Required"),
-                  cfPassword: Yup.string().required("Required"),
+                  password: Yup.string().min(12, "too short!"),
+                  cfPassword: Yup.string().min(6, "Too Short!"),
                 })}
                 onSubmit={(values) => {
                   console.log("onSubmit", JSON.stringify({ values }, null, 2));
@@ -72,7 +72,7 @@ const Register = () => {
                   alert("You have registered ");
                 }}
               >
-                {({ values, handleChange, errors }) => (
+                {({ values, handleChange, errors, handleBlur }) => (
                   <Form>
                     <div className={classes.input}>
                       <Typography sx={{ margin: "10px" }}>
