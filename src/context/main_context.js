@@ -1,12 +1,16 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import reducer from "../reducers/main_reducer";
 import { createTheme } from "@mui/material";
+import { doc, deleteDoc } from "firebase/firestore";
+import { fireStore } from "../config/firebase";
+
 import { auth } from "../config/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
+import useFirestore from "../hooks/useFirestore";
 
 const MainContext = React.createContext();
 const theme = createTheme({
@@ -44,11 +48,21 @@ const register = async (auth, user, password) => {
 
 const initialState = {
   theme: theme,
+  count: 0,
 };
 
 export const MainProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [docs, setDocs] = useState([]);
+  const endAuction = async (auctionId) => {
+    try {
+      await deleteDoc(doc(fireStore, "auctions", auctionId));
+      dispatch({ type: "END_AUCTION" });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     const subscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
@@ -56,9 +70,20 @@ export const MainProvider = ({ children }) => {
     });
     return subscribe;
   }, []);
+
   return (
     <MainContext.Provider
-      value={{ ...state, register, login, logout, currentUser, auth }}
+      value={{
+        ...state,
+        docs,
+        setDocs,
+        register,
+        login,
+        logout,
+        currentUser,
+        auth,
+        endAuction,
+      }}
     >
       {children}
     </MainContext.Provider>

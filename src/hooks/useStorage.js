@@ -2,6 +2,7 @@ import { storage, fireStore } from "../config/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 
+
 const useStorage = async (data) => {
   try {
     const imageRef = ref(storage, `images/${data.image.name}`);

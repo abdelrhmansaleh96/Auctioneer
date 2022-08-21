@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Countdown from "react-countdown";
 import { useMainContext } from "../../context/main_context";
+import { Divider } from "@mui/material";
 
 const renderer = ({ days, hours, minutes, seconds, completed, props }) => {
   if (completed) {
@@ -50,14 +51,28 @@ const renderer = ({ days, hours, minutes, seconds, completed, props }) => {
                 {days * 24 + hours} hr: {minutes} min: {seconds} sec
               </Typography>
             </CardContent>
-            <CardActions>
+            <Divider />
+            <CardActions
+              sx={{
+                display: "flex",
+                justifyContent: "space-around",
+              }}
+            >
               {!props.owner ? (
                 <Button size="large">Bid</Button>
               ) : props.owner.email === props.item.email ? (
-                <Button size="large">Cancel Auction</Button>
+                <Button
+                  size="large"
+                  onClick={() => {
+                    props.endAuction(props.item.id);
+                  }}
+                >
+                  Cancel Auction
+                </Button>
               ) : (
                 <Button size="large">Bid</Button>
               )}
+              <Typography>${props.item.startingPrice}</Typography>
             </CardActions>
           </Card>
         </Grid>
@@ -67,7 +82,7 @@ const renderer = ({ days, hours, minutes, seconds, completed, props }) => {
 };
 
 const AuctionCard = ({ doc }) => {
-  const { currentUser } = useMainContext();
+  const { currentUser, endAuction } = useMainContext();
   let expireDate = doc.duration;
   return (
     <Countdown
@@ -75,6 +90,7 @@ const AuctionCard = ({ doc }) => {
       date={expireDate}
       renderer={renderer}
       owner={currentUser}
+      endAuction={endAuction}
     />
   );
 };
