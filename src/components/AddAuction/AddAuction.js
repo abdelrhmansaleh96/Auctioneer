@@ -15,7 +15,7 @@ import * as Yup from "yup";
 const AddAuction = ({ setAuction, auction }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => setOpen(false);         
   const { currentUser } = useMainContext();
   const style = {
     position: "absolute",

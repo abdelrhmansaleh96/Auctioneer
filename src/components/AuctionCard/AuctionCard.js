@@ -47,8 +47,8 @@ const renderer = ({ days, hours, minutes, seconds, completed, props }) => {
               <Typography variant="body1" color="text.secondary">
                 {props.item.description}
               </Typography>
-              <Typography variant="h5">
-                {days * 24 + hours} hr: {minutes} min: {seconds} sec
+              <Typography variant="h6">
+                {days} days: {hours} hr: {minutes} min: {seconds} sec
               </Typography>
             </CardContent>
             <Divider />
