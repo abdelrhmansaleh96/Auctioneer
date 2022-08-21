@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import reducer from "../reducers/main_reducer";
 import { createTheme } from "@mui/material";
-import { auth } from "../config/firebase";
+import { doc, deleteDoc, updateDoc } from "firebase/firestore";
+
+import { auth, fireStore } from "../config/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -56,9 +58,28 @@ export const MainProvider = ({ children }) => {
     });
     return subscribe;
   }, []);
+  const endAuction = async (auctionId) => {
+    await deleteDoc(doc(fireStore, "auctions", auctionId));
+  };
+  const bidAuction = async (auctionId, startingPrice) => {
+    const auctionRef = await doc(fireStore, "auctions", auctionId);
+    await updateDoc(auctionRef, {
+      startingPrice: Number(startingPrice) + 100,
+      currWinner: currentUser.email,
+    });
+  };
   return (
     <MainContext.Provider
-      value={{ ...state, register, login, logout, currentUser, auth }}
+      value={{
+        ...state,
+        register,
+        login,
+        logout,
+        currentUser,
+        auth,
+        endAuction,
+        bidAuction,
+      }}
     >
       {children}
     </MainContext.Provider>
