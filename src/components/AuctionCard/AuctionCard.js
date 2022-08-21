@@ -30,17 +30,21 @@ const renderer = ({ days, hours, minutes, seconds, completed, props }) => {
             alignItems: "center",
           }}
         >
-          <Card sx={{ maxWidth: 345 }}>
+            
+          <Card sx={{ borderRadius: "33px", boxShadow: "", maxWidth: 345 }}>
             <CardMedia
               component="img"
-              height="140"
-              sx={{
-                minWidth: "250px",
-              }}
+              height="170"
+              sx={{ height: "140", minWidth: "250px" }}
               image={props.item.imageUrl}
               alt="green iguana"
             />
-            <CardContent>
+            <CardContent
+              sx={{
+                height: "140px",
+                width: "300px",
+              }}
+            >
               <Typography gutterBottom variant="h3" component="div">
                 {props.item.title}
               </Typography>
@@ -56,6 +60,7 @@ const renderer = ({ days, hours, minutes, seconds, completed, props }) => {
               sx={{
                 display: "flex",
                 justifyContent: "space-around",
+                height: "100px",
               }}
             >
               {!props.owner ? (
