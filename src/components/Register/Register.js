@@ -9,12 +9,13 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import { Formik, Form } from "formik";
 import { useMainContext } from "../../context/main_context";
+import * as Yup from "yup";
 
 const Register = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const {  register, auth } = useMainContext();
+  const { register, auth } = useMainContext();
 
   const style = {
     position: "absolute",
@@ -58,6 +59,13 @@ const Register = () => {
                   password: "",
                   cfPassword: "",
                 }}
+                validationSchema={Yup.object().shape({
+                  email: Yup.string()
+                    .email("Invalid email")
+                    .required("Required"),
+                  password: Yup.string().required("Required"),
+                  cfPassword: Yup.string().required("Required"),
+                })}
                 onSubmit={(values) => {
                   console.log("onSubmit", JSON.stringify({ values }, null, 2));
                   register(auth, values.email, values.password);
@@ -77,6 +85,8 @@ const Register = () => {
                         name="email"
                         value={values.email}
                         onChange={handleChange}
+                        error={Boolean(errors.email)}
+                        helperText={errors.email}
                       />
                     </div>
                     <div className={classes.input}>
@@ -90,6 +100,8 @@ const Register = () => {
                         id="outlined-basic"
                         label="Password"
                         variant="outlined"
+                        error={Boolean(errors.password)}
+                        helperText={errors.password}
                       />
                     </div>
                     <div className={classes.input}>
@@ -103,6 +115,8 @@ const Register = () => {
                         id="outlined-basic"
                         label="Confirm Password"
                         variant="outlined"
+                        error={Boolean(errors.cfPassword)}
+                        helperText={errors.cfPassword}
                       />
                     </div>
                     <Button type="submit">Register</Button>

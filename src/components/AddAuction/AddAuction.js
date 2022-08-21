@@ -10,6 +10,7 @@ import TextField from "@mui/material/TextField";
 import { Formik, Form } from "formik";
 import { useMainContext } from "../../context/main_context";
 import useStorage from "../../hooks/useStorage";
+import * as Yup from "yup";
 
 const AddAuction = ({ setAuction, auction }) => {
   const [open, setOpen] = useState(false);
@@ -63,10 +64,25 @@ const AddAuction = ({ setAuction, auction }) => {
                 initialValues={{
                   title: "",
                   description: "",
-                  duration: "",
-                  startingPrice: "",
+                  duration: 0,
+                  startingPrice: 0,
                   image: "",
                 }}
+                validationSchema={Yup.object().shape({
+                  title: Yup.string().required("Title is required"),
+                  description: Yup.string()
+                    .required("Description is required")
+                    .min(10, "Description must be at least 10 characters")
+                    .max(100, "Description must be less than 100 characters"),
+                  duration: Yup.number()
+                    .required("Duration is required")
+                    .min(1)
+                    .max(5),
+                  startingPrice: Yup.number()
+                    .min(100)
+                    .required("Starting price is required"),
+                  image: Yup.mixed().required("Image is required"),
+                })}
                 onSubmit={(values) => {
                   let currDate = new Date();
                   let dueDate = currDate.setHours(
@@ -104,6 +120,8 @@ const AddAuction = ({ setAuction, auction }) => {
                         name="title"
                         value={values.title}
                         onChange={handleChange}
+                        error={Boolean(errors.title)}
+                        helperText={errors.title}
                       />
                     </div>
                     <div className={classes.input}>
@@ -117,6 +135,8 @@ const AddAuction = ({ setAuction, auction }) => {
                         id="outlined-basic"
                         label="description"
                         variant="outlined"
+                        error={Boolean(errors.description)}
+                        helperText={errors.description}
                       />
                     </div>
                     <div className={classes.input}>
@@ -130,6 +150,8 @@ const AddAuction = ({ setAuction, auction }) => {
                         id="outlined-basic"
                         label="duration"
                         variant="outlined"
+                        error={Boolean(errors.duration)}
+                        helperText={errors.duration}
                       />
                     </div>
                     <div className={classes.input}>
@@ -143,6 +165,8 @@ const AddAuction = ({ setAuction, auction }) => {
                         id="outlined-basic"
                         label="startingPrice"
                         variant="outlined"
+                        error={Boolean(errors.startingPrice)}
+                        helperText={errors.startingPrice}
                       />
                     </div>
                     <div className={classes.input}>
